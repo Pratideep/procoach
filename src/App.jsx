@@ -25,14 +25,20 @@ export default function App() {
       {/* Sticky urgency bar — appears on scroll */}
       <StickyBar />
 
-      {/* Main page sections */}
+      {/*
+        Section order = conversion order: hook → PROOF → process → TRUST →
+        words → price → objections → apply. Price now comes after the visitor
+        trusts the results and the coach (was before About/Testimonials).
+        Transformations leads with the coach's own before/after (transformations[0],
+        isCoach) so credibility lands immediately after the hero.
+      */}
       <main>
         <Hero />
-        <HowItWorks />
         <Transformations />
+        <HowItWorks />
+        <About />
         <Testimonials />
         <Plans />
-        <About />
         <FAQ />
         <LeadForm />
       </main>

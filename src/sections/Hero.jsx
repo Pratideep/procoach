@@ -5,15 +5,16 @@
  */
 import { useState, useEffect, useRef } from 'react'
 import { buildWhatsAppUrl } from '../utils/whatsapp'
+import { CTA_LABEL, CTA_HREF } from '../utils/cta'
+import { trackCta } from '../utils/analytics'
+import { STATS, showRating } from '../utils/stats'
+import coachFront from '../assets/coach/front.png'
 
-// Coach photos
-import coachFront  from '../assets/coach/front.png'
-
-// Stat items shown below the headline
+// Stat items shown below the headline — all values from the single source of truth
 const stats = [
-  { value: 50, suffix: '+', label: 'Clients Transformed' },
-  { value: 90,  suffix: '',  label: 'Days Average Result' },
-  { value: 100, suffix: '%', label: 'Personalised Plans' },
+  { value: parseInt(STATS.clients, 10), suffix: '+', label: 'Clients Coached' },
+  { value: STATS.avgResultWeeks, suffix: ' wks', label: 'To Visible Results' },
+  { value: parseInt(STATS.personalised, 10), suffix: '%', label: 'Personalised Plans' },
 ]
 
 // Animated counter hook — triggers on first intersection
@@ -104,8 +105,8 @@ export default function Hero() {
                   </svg>
                 ))}
               </div>
-              <span className="text-white font-bold text-sm">4.9</span>
-              <span className="text-white/40 text-xs">· 50+ transformations</span>
+              {showRating && <span className="text-white font-bold text-sm">{STATS.rating}</span>}
+              <span className="text-white/40 text-xs">{showRating ? '· ' : ''}{STATS.clients} transformations</span>
             </div>
           </div>
 
@@ -126,8 +127,13 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a id="hero-cta-start" href="#contact" className="btn-primary text-base">
-              Start My Transformation
+            <a
+              id="hero-cta-start"
+              href={CTA_HREF}
+              onClick={() => trackCta('hero')}
+              className="btn-primary text-base"
+            >
+              {CTA_LABEL}
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -163,8 +169,12 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-2xl border-2 border-brand-blue/20 rotate-3 scale-105" />
             <img
               src={coachFront}
-              alt="Your fitness coach"
-              className="relative rounded-2xl object-cover object-top w-full h-[480px] md:h-[560px] shadow-2xl shadow-black/60"
+              alt="Coach Pratideep Naik"
+              width={384}
+              height={600}
+              fetchPriority="high"
+              decoding="async"
+              className="relative rounded-2xl object-contain object-center w-full max-h-[600px] shadow-2xl shadow-black/60"
             />
             {/* Badge overlay */}
             <div className="absolute -bottom-4 -left-4 bg-dark-700 border border-white/10 rounded-xl px-4 py-3 shadow-xl">
@@ -172,13 +182,13 @@ export default function Hero() {
               <p className="text-white/60 text-xs mt-0.5">Real results or your money back</p>
             </div>
 
-            {/* Live availability pill */}
-            <div className="absolute -top-4 -right-4 bg-dark-700 border border-green-500/30 rounded-xl px-3 py-2 shadow-xl animate-float">
+            {/* Social-proof pill (scarcity lives only in the sticky bar + Plans) */}
+            <div className="absolute -top-4 -right-4 bg-dark-700 border border-brand-blue/30 rounded-xl px-3 py-2 shadow-xl animate-float">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <p className="text-green-400 font-bold text-xs">4 spots left</p>
+                <span className="w-2 h-2 bg-brand-blue rounded-full animate-pulse" />
+                <p className="text-brand-blue font-bold text-xs">{STATS.clients} transformed</p>
               </div>
-              <p className="text-white/40 text-[10px] mt-0.5">This month</p>
+              <p className="text-white/40 text-[10px] mt-0.5">Real clients</p>
             </div>
           </div>
         </div>

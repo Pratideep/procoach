@@ -13,7 +13,9 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 group"
+      /* Desktop only — mobile uses the bottom conversion bar (which already
+         includes a WhatsApp action), so the two never overlap. */
+      className="hidden md:block fixed bottom-6 right-6 z-50 group"
     >
       {/* Pulsing ring */}
       <span className="absolute inset-0 rounded-full bg-green-500 opacity-40 whatsapp-ring" />

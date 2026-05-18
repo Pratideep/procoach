@@ -3,7 +3,13 @@
  * Social proof section — real client quotes with star ratings in an
  * infinite horizontal marquee carousel.
  */
+import { useState } from 'react'
 import ScrollReveal from '../components/ScrollReveal'
+import { STATS, showRating } from '../utils/stats'
+
+// Real client after-photos for avatars
+import piyushPhoto  from '../assets/clients/piyush_after1.jpeg'
+import vaibhavPhoto from '../assets/clients/vaibhao_front_curr.jpeg'
 
 const testimonials = [
   {
@@ -15,6 +21,7 @@ const testimonials = [
       'I had tried multiple diets and workout videos before but nothing stuck. Coach Pratideep gave me a plan that fit around my work schedule — and I started seeing results within the first 3 weeks. The daily WhatsApp check-ins kept me honest.',
     stars: 5,
     initials: 'PM',
+    photo: piyushPhoto,
   },
   {
     id: 2,
@@ -25,6 +32,7 @@ const testimonials = [
       'Complete body recomposition in 10 weeks. No gym, no extreme diet. Pratideep adjusted my plan every 4 weeks based on how my body was responding — it never felt like a one-size-fits-all approach. Highly recommend.',
     stars: 5,
     initials: 'VK',
+    photo: vaibhavPhoto,
   },
   {
     id: 3,
@@ -32,9 +40,10 @@ const testimonials = [
     duration: '12 Weeks',
     result: 'Visible back definition',
     quote:
-      'The back transformation was something I never thought would be possible working from home with no gym. Coach Pratideep\'s programming was spot on. The before/after photos honestly don\'t do it justice \u2014 I feel completely different.',
+      'The back transformation was something I never thought would be possible working from home with no gym. Coach Pratideep\'s programming was spot on. The before/after photos honestly don\'t do it justice — I feel completely different.',
     stars: 5,
     initials: 'PM',
+    photo: piyushPhoto,
   },
   {
     id: 4,
@@ -45,28 +54,10 @@ const testimonials = [
       'I was sceptical at first — online coaching felt impersonal. But Pratideep replied to every message, every question, every doubt. The weekly measurement tracking showed progress even on weeks when I thought nothing was happening.',
     stars: 5,
     initials: 'VK',
+    photo: vaibhavPhoto,
   },
-  // Extra entries to pad the marquee
-  {
-    id: 5,
-    name: 'Rahul S.',
-    duration: '90 Days',
-    result: 'Lost 14 kg',
-    quote:
-      'ProCoach is the real deal. No BS, no cookie-cutter plans. I travel constantly for work and Pratideep always adapted my workouts to wherever I was. Down 14 kg in 3 months and I\'ve kept it off.',
-    stars: 5,
-    initials: 'RS',
-  },
-  {
-    id: 6,
-    name: 'Arjun M.',
-    duration: '8 Weeks',
-    result: 'Lost 7 kg',
-    quote:
-      'Never thought I could lose fat without giving up carbs or eating boring food. The diet plan was actually enjoyable. My family noticed the change before I did. Incredible 8 weeks with Pratideep.',
-    stars: 5,
-    initials: 'AM',
-  },
+  // Only real, verifiable clients are listed. Padded/anonymous entries were
+  // removed — credibility comes from depth, not volume (see IMPROVEMENT_PLAN §9).
 ]
 
 // Duplicate for seamless infinite scroll
@@ -89,12 +80,23 @@ function TestimonialCard({ t }) {
     <div className="flex-shrink-0 w-80 bg-dark-700 border border-white/8 rounded-2xl p-6 mx-3 hover:border-brand-blue/30 transition-colors duration-300">
       <Stars count={t.stars} />
       <p className="text-white/75 text-sm leading-relaxed mb-5 line-clamp-4">
-        "{t.quote}"
+        &ldquo;{t.quote}&rdquo;
       </p>
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-brand-blue/20 border border-brand-blue/30 flex items-center justify-center text-brand-blue text-xs font-bold shrink-0">
-          {t.initials}
-        </div>
+        {/* Avatar — real photo if available, else styled initials */}
+        {t.photo ? (
+          <img
+            src={t.photo}
+            alt={t.name}
+            className="w-10 h-10 rounded-full object-cover object-center border-2 border-brand-blue/40 shrink-0 shadow-md"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-brand-blue/20 border border-brand-blue/30 flex items-center justify-center text-brand-blue text-xs font-bold shrink-0">
+            {t.initials}
+          </div>
+        )}
         <div>
           <p className="text-white font-semibold text-sm">{t.name}</p>
           <p className="text-brand-blue text-xs font-medium">{t.result} · {t.duration}</p>
@@ -105,6 +107,8 @@ function TestimonialCard({ t }) {
 }
 
 export default function Testimonials() {
+  const [paused, setPaused] = useState(false)
+
   return (
     <section id="testimonials" className="bg-dark-900 py-20 md:py-28 overflow-hidden relative">
       <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-blue/20 to-transparent" />
@@ -121,7 +125,7 @@ export default function Testimonials() {
             Real results from real people — coached by Pratideep Naik.
           </p>
 
-          {/* Aggregate rating */}
+          {/* Aggregate rating — only shows a number when a real source exists */}
           <div className="inline-flex items-center gap-3 mt-6 bg-dark-700 border border-white/5 rounded-2xl px-5 py-3">
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -130,30 +134,47 @@ export default function Testimonials() {
                 </svg>
               ))}
             </div>
-            <span className="text-white font-bold text-lg">4.9</span>
-            <span className="text-white/40 text-sm">· 50+ happy clients</span>
+            {showRating && <span className="text-white font-bold text-lg">{STATS.rating}</span>}
+            <span className="text-white/40 text-sm">
+              {showRating ? `· ${STATS.clients} clients · ${STATS.ratingSource}` : `${STATS.clients} clients coached`}
+            </span>
           </div>
         </ScrollReveal>
       </div>
 
-      {/* Marquee track */}
-      <div className="relative">
+      {/* Marquee track — tap anywhere to pause on mobile */}
+      <div
+        className="relative cursor-pointer select-none"
+        onClick={() => setPaused(p => !p)}
+        aria-label={paused ? 'Resume' : 'Pause scrolling'}
+      >
         {/* Fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-dark-900 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-dark-900 to-transparent z-10 pointer-events-none" />
 
         {/* Row 1 — scrolls left */}
-        <div className="flex marquee-left mb-4">
+        <div className={`flex mb-4 ${paused ? 'marquee-paused' : 'marquee-left'}`}>
           {doubled.map((t, i) => (
             <TestimonialCard key={`a-${t.id}-${i}`} t={t} />
           ))}
         </div>
 
         {/* Row 2 — scrolls right */}
-        <div className="flex marquee-right">
+        <div className={`flex ${paused ? 'marquee-paused' : 'marquee-right'}`}>
           {[...doubled].reverse().map((t, i) => (
             <TestimonialCard key={`b-${t.id}-${i}`} t={t} />
           ))}
+        </div>
+
+        {/* Pause/resume hint — mobile only */}
+        <div className="flex justify-center mt-5">
+          <div className="inline-flex items-center gap-2 bg-dark-700/80 border border-white/8 rounded-full px-4 py-1.5 text-white/40 text-xs">
+            {paused ? (
+              <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/></svg> Tap to resume</>
+            ) : (
+              <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"/></svg> Tap to pause</>
+            )}
+          </div>
         </div>
       </div>
     </section>

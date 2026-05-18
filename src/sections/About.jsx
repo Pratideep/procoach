@@ -1,35 +1,60 @@
 /**
  * sections/About.jsx
  * Personal introduction, coaching philosophy, credentials, and mini-stats.
+ *
+ * Photo display:
+ *  - Desktop/tablet (lg+): dual-column vertical auto-scrolling strip
+ *  - Mobile (<lg): single-photo horizontal swipe carousel (full width, full body)
+ *  - ANY photo tap → opens full-screen gallery lightbox
  */
+import { useState, useRef } from 'react'
 import ScrollReveal from '../components/ScrollReveal'
-import coachTriceps from '../assets/coach/tricpes.jpeg'
-import coachBack    from '../assets/coach/back.jpg'
+import Lightbox from '../components/Lightbox'
+
+// All coach photos
+import coachFront        from '../assets/coach/front.png'
+import coachBack         from '../assets/coach/back.jpg'
+import coachTriceps      from '../assets/coach/tricpes.jpeg'
+import coachLatSpread    from '../assets/coach/lat-spread.jpg'
+import coachBackPose     from '../assets/coach/back-pose.jpg'
+import coachBackButterfly from '../assets/coach/back-butterfly.jpg'
+import coachAesth1       from '../assets/coach/aestheics1.jpg'
+import coachAesth2       from '../assets/coach/aestheics2.jpg'
+import coachAesth3       from '../assets/coach/aestheics3.jpg'
+import coachAesth4       from '../assets/coach/aestheics4.jpg'
+import coachAesth5       from '../assets/coach/aestheics5.jpg'
+
+// Ordered: front first, then aesthetic shots, then poses
+const allPhotos = [
+  { src: coachFront,         alt: 'Coach Pratideep — Front pose' },
+  { src: coachAesth1,        alt: 'Coach Pratideep — Aesthetic 1' },
+  { src: coachAesth2,        alt: 'Coach Pratideep — Aesthetic 2' },
+  { src: coachAesth3,        alt: 'Coach Pratideep — Aesthetic 3' },
+  { src: coachBack,          alt: 'Coach Pratideep — Back pose' },
+  { src: coachAesth4,        alt: 'Coach Pratideep — Aesthetic 4' },
+  { src: coachTriceps,       alt: 'Coach Pratideep — Triceps pose' },
+  { src: coachAesth5,        alt: 'Coach Pratideep — Aesthetic 5' },
+  { src: coachLatSpread,     alt: 'Coach Pratideep — Lat spread' },
+  { src: coachBackPose,      alt: 'Coach Pratideep — Back pose 2' },
+  { src: coachBackButterfly, alt: 'Coach Pratideep — Back butterfly' },
+]
+
+// Strip columns for desktop scrolling animation
+const stripCol1 = [coachFront, coachAesth1, coachBack, coachAesth3, coachLatSpread, coachAesth5]
+const stripCol2 = [coachTriceps, coachAesth2, coachBackPose, coachAesth4, coachBackButterfly, coachAesth1]
 
 const journey = [
-  {
-    year: '2021',
-    text: 'Started my fitness journey with running, but struggled to see real results.',
-  },
-  {
-    year: '2022',
-    text: 'Shifted to proper strength training and nutrition. Began understanding what actually works.',
-  },
-  {
-    year: '2023',
-    text: 'Built consistency, improved physique, and started helping friends get results.',
-  },
-  {
-    year: '2024',
-    text: '2+ years coaching experience. Helped multiple clients transform using a practical, real-life approach.',
-  },
+  { year: '2021', text: 'Started my fitness journey with running, but struggled to see real results.' },
+  { year: '2022', text: 'Shifted to proper strength training and nutrition. Began understanding what actually works.' },
+  { year: '2023', text: 'Built consistency, improved physique, and started helping friends get results.' },
+  { year: '2024', text: '2+ years coaching experience. Helped multiple clients transform using a practical, real-life approach.' },
 ]
 
 const credentials = [
-  { label: 'Certified Coach', icon: '🏅' },
-  { label: 'Precision Nutrition', icon: '🥗' },
-  { label: '4+ Years Training', icon: '📆' },
-  { label: '2+ Years Coaching', icon: '🎯' },
+  { label: 'Certified Coach',      icon: '🏅' },
+  { label: 'Precision Nutrition',  icon: '🥗' },
+  { label: '4+ Years Training',    icon: '📆' },
+  { label: '2+ Years Coaching',    icon: '🎯' },
 ]
 
 const miniStats = [
@@ -38,42 +63,180 @@ const miniStats = [
   { value: '4+',  label: 'Years Training' },
 ]
 
+// ── Mobile swipe carousel ────────────────────────────────────────────────────
+function MobileCarousel({ onPhotoTap }) {
+  const [current, setCurrent] = useState(0)
+  const touchStartX = useRef(null)
+
+  const prev = () => setCurrent(i => (i - 1 + allPhotos.length) % allPhotos.length)
+  const next = () => setCurrent(i => (i + 1) % allPhotos.length)
+
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+  const onTouchEnd   = (e) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 40) dx < 0 ? next() : prev()
+    touchStartX.current = null
+  }
+
+  return (
+    <div className="relative w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/60 bg-dark-900"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Photo */}
+      <div
+        className="cursor-pointer"
+        onClick={() => onPhotoTap(current)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && onPhotoTap(current)}
+        aria-label="Tap to view full screen"
+      >
+        <img
+          src={allPhotos[current].src}
+          alt={allPhotos[current].alt}
+          className="w-full max-h-[420px] object-contain"
+          loading="lazy"
+          draggable={false}
+        />
+      </div>
+
+      {/* Tap-to-open hint */}
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 pointer-events-none">
+        <svg className="w-3 h-3 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        Tap to enlarge
+      </div>
+
+      {/* Prev / Next arrows */}
+      <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center" aria-label="Previous">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center" aria-label="Next">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {allPhotos.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`rounded-full transition-all duration-300 ${
+              i === current ? 'bg-brand-blue w-4 h-1.5' : 'bg-white/30 w-1.5 h-1.5'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Name badge */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-dark-900/80 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2 whitespace-nowrap">
+        <span className="w-1.5 h-1.5 bg-brand-blue rounded-full animate-pulse" />
+        <span className="text-white font-semibold text-xs tracking-wide">Pratideep Naik</span>
+        <span className="text-white/30 text-xs">· Coach</span>
+      </div>
+    </div>
+  )
+}
+
+// ── Main section ──────────────────────────────────────────────────────────────
 export default function About() {
+  const [lightboxIndex, setLightboxIndex] = useState(null)
+
   return (
     <section id="about" className="bg-dark-800 py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-5 md:px-10">
 
         {/* Header */}
         <ScrollReveal className="text-center mb-16">
-          <p className="text-brand-blue text-sm font-bold tracking-[0.3em] uppercase mb-3">
-            My Story
-          </p>
+          <p className="text-brand-blue text-sm font-bold tracking-[0.3em] uppercase mb-3">My Story</p>
           <h2 className="section-title text-white mb-2">
             Why I <span className="gradient-text">Coach</span>
           </h2>
-          <p className="text-white/40 font-semibold tracking-widest text-sm uppercase mt-3">Pratideep Naik · Online Fitness Coach</p>
+          <p className="text-white/40 font-semibold tracking-widest text-sm uppercase mt-3">
+            Pratideep Naik · Online Fitness Coach
+          </p>
         </ScrollReveal>
 
         <div className="flex flex-col lg:flex-row gap-12 items-start">
 
-          {/* Left — photos + mini stats */}
-          <ScrollReveal direction="left" className="flex-1">
-            <div className="flex gap-4 justify-center lg:justify-start">
-              <img
-                src={coachTriceps}
-                alt="Coach physique"
-                className="w-44 md:w-52 rounded-2xl object-cover h-64 md:h-80 shadow-xl shadow-black/50 mt-8"
-                loading="lazy"
-              />
-              <img
-                src={coachBack}
-                alt="Coach back pose"
-                className="w-44 md:w-52 rounded-2xl object-cover h-64 md:h-80 shadow-xl shadow-black/50"
-                loading="lazy"
-              />
+          {/* Left — photos */}
+          <ScrollReveal direction="left" className="lg:w-80 xl:w-96 shrink-0 w-full">
+
+            {/* ── MOBILE: swipe carousel ──────────────────────────── */}
+            <div className="block lg:hidden">
+              <MobileCarousel onPhotoTap={(i) => setLightboxIndex(i)} />
             </div>
 
-            {/* Mini stats row */}
+            {/* ── DESKTOP: dual-column scrolling strip ────────────── */}
+            <div className="hidden lg:block about-strip-wrapper relative h-[540px] overflow-hidden rounded-3xl border border-white/8 shadow-2xl shadow-black/60">
+              {/* Fade masks */}
+              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-dark-800 to-transparent z-10 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-dark-800 to-transparent z-10 pointer-events-none" />
+
+              {/* Tap hint */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-black/70 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 pointer-events-none whitespace-nowrap">
+                <svg className="w-3 h-3 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Tap to enlarge
+              </div>
+
+              <div className="flex gap-3 h-full px-3 pt-3">
+                {/* Column 1 — scrolls UP */}
+                <div className="flex-1 about-strip-up">
+                  {[...stripCol1, ...stripCol1].map((src, i) => {
+                    const photoIdx = allPhotos.findIndex(p => p.src === src)
+                    return (
+                      <img
+                        key={`col1-${i}`}
+                        src={src}
+                        alt="Coach Pratideep Naik"
+                        className="w-full h-64 object-contain bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        loading="lazy"
+                        decoding="async"
+                        onClick={() => setLightboxIndex(photoIdx >= 0 ? photoIdx : 0)}
+                      />
+                    )
+                  })}
+                </div>
+
+                {/* Column 2 — scrolls DOWN */}
+                <div className="flex-1 about-strip-down">
+                  {[...stripCol2, ...stripCol2].map((src, i) => {
+                    const photoIdx = allPhotos.findIndex(p => p.src === src)
+                    return (
+                      <img
+                        key={`col2-${i}`}
+                        src={src}
+                        alt="Coach Pratideep Naik"
+                        className="w-full h-64 object-contain bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        loading="lazy"
+                        decoding="async"
+                        onClick={() => setLightboxIndex(photoIdx >= 0 ? photoIdx : 0)}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Name badge */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 bg-dark-900/80 backdrop-blur-md border border-white/10 rounded-full px-5 py-2 flex items-center gap-2 whitespace-nowrap shadow-xl">
+                <span className="w-2 h-2 bg-brand-blue rounded-full animate-pulse" />
+                <span className="text-white font-semibold text-sm tracking-wide">Pratideep Naik</span>
+                <span className="text-white/30 text-xs">· Coach</span>
+              </div>
+            </div>
+
+            {/* Mini stats */}
             <div className="flex gap-4 mt-6 justify-center lg:justify-start">
               {miniStats.map((s) => (
                 <div key={s.label} className="flex-1 bg-dark-700 border border-white/8 rounded-xl py-4 px-3 text-center">
@@ -136,6 +299,16 @@ export default function About() {
           </div>
         </div>
       </div>
+
+      {/* ── Gallery Lightbox ─────────────────────────────────────────── */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          items={allPhotos}
+          startIndex={lightboxIndex}
+          mode="gallery"
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </section>
   )
 }

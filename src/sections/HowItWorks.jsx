@@ -4,7 +4,7 @@
  * exactly what happens after a visitor submits the form.
  */
 import ScrollReveal from '../components/ScrollReveal'
-import { buildWhatsAppUrl } from '../utils/whatsapp'
+import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 
 const steps = [
   {
@@ -110,8 +110,8 @@ export default function HowItWorks() {
 
         {/* Bottom CTA */}
         <ScrollReveal delay={400} className="text-center mt-14">
-          <a href="#contact" className="btn-primary text-base">
-            Start My Free Consultation
+          <a href={CTA_HREF} className="btn-primary text-base">
+            {CTA_LABEL}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

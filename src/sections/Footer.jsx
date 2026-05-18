@@ -48,7 +48,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-dark-900 border-t border-white/5 pt-14 pb-8">
+    <footer className="bg-dark-900 border-t border-white/5 pt-14 pb-28 md:pb-8">
       <div className="max-w-7xl mx-auto px-5 md:px-10">
 
         {/* Top row */}
@@ -57,8 +57,11 @@ export default function Footer() {
           {/* Brand + tagline */}
           <div className="max-w-xs">
             <a href="#hero" className="font-display text-2xl tracking-widest text-white hover:text-brand-blue transition-colors">
-              PRO<span className="text-brand-blue">COACH</span>
+              PRATIDEEP <span className="text-brand-blue">NAIK</span>
             </a>
+            <p className="text-white/30 text-[10px] font-semibold uppercase tracking-[0.25em] mt-1">
+              Online Transformation Coach
+            </p>
             <p className="text-white/40 text-sm mt-3 leading-relaxed">
               Helping busy men lose fat &amp; build muscle — without giving up their lifestyle.
             </p>
@@ -116,7 +119,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/20 text-xs">
-            © {year} ProCoach. All rights reserved.
+            © {year} Pratideep Naik. All rights reserved.
           </p>
           <p className="text-white/20 text-xs">
             Results may vary. Individual commitment required.

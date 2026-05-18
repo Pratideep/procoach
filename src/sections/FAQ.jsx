@@ -4,6 +4,7 @@
  */
 import { useState } from 'react'
 import ScrollReveal from '../components/ScrollReveal'
+import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 
 const faqs = [
   {
@@ -112,12 +113,12 @@ export default function FAQ() {
 
         {/* Still have questions? */}
         <ScrollReveal delay={200} className="mt-12 text-center">
-          <p className="text-white/40 text-sm mb-4">Still have a question?</p>
+          <p className="text-white/40 text-sm mb-4">Still have a question? Get a free, no-obligation plan and ask away.</p>
           <a
-            href="#contact"
+            href={CTA_HREF}
             className="inline-flex items-center gap-2 text-brand-blue font-semibold text-sm hover:text-brand-blue-light transition-colors"
           >
-            Ask us directly →
+            {CTA_LABEL} →
           </a>
         </ScrollReveal>
       </div>

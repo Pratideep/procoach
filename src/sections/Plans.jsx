@@ -3,7 +3,9 @@
  * Two pricing tiers: Monthly (₹1,999/mo) and 3-Month Bundle (₹4,999 one-time).
  */
 import ScrollReveal from '../components/ScrollReveal'
-import { buildWhatsAppUrl } from '../utils/whatsapp'
+import { STATS } from '../utils/stats'
+import { CTA_LABEL, CTA_HREF } from '../utils/cta'
+import { trackCta } from '../utils/analytics'
 
 const includes = [
   { icon: '💪', text: 'Customised Workout Plan' },
@@ -77,10 +79,10 @@ export default function Plans() {
               {/* CTA */}
               <a
                 id="plans-cta-monthly"
-                href="#contact"
+                href={CTA_HREF}
                 className="block w-full text-center py-3.5 border-2 border-white/20 hover:border-brand-blue text-white font-bold rounded-xl transition-all duration-300 hover:text-brand-blue"
               >
-                Get Started
+                {CTA_LABEL}
               </a>
               <p className="text-center text-white/25 text-xs mt-3">No contracts. Cancel anytime.</p>
             </div>
@@ -98,10 +100,12 @@ export default function Plans() {
                 <span className="inline-flex items-center gap-1 bg-brand-blue/10 border border-brand-blue/25 text-brand-blue text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
                   🔥 Best Value
                 </span>
-                <span className="inline-flex items-center gap-1 bg-red-500/10 border border-red-500/25 text-red-400 text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
-                  <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
-                  4 spots left
-                </span>
+                {STATS.spotsLeft != null && (
+                  <span className="inline-flex items-center gap-1 bg-red-500/10 border border-red-500/25 text-red-400 text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
+                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
+                    {STATS.spotsLeft} spots left
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
@@ -137,10 +141,11 @@ export default function Plans() {
               {/* CTA */}
               <a
                 id="plans-cta-bundle"
-                href="#contact"
+                href={CTA_HREF}
+                onClick={() => trackCta('plans_bundle')}
                 className="block w-full text-center btn-primary rounded-xl"
               >
-                Start My Transformation
+                {CTA_LABEL}
               </a>
               <p className="text-center text-white/30 text-xs mt-3">90-day money back guarantee.</p>
             </div>

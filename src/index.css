@@ -155,3 +155,34 @@ body {
 .btn-primary {
   animation: glow-pulse 3s ease-in-out infinite;
 }
+
+/* ──────────────────────────────────────────
+   About section — dual-column photo strip
+   ────────────────────────────────────────── */
+@keyframes strip-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+@keyframes strip-down {
+  0%   { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+.about-strip-up {
+  animation: strip-up 28s linear infinite;
+}
+.about-strip-down {
+  animation: strip-down 32s linear infinite;
+}
+.about-strip-wrapper:hover .about-strip-up,
+.about-strip-wrapper:hover .about-strip-down {
+  animation-play-state: paused;
+}
+
+/* ──────────────────────────────────────────
+   Testimonials — tap-to-pause marquee
+   ────────────────────────────────────────── */
+.marquee-paused {
+  animation-play-state: paused !important;
+  /* Keep the current transform position frozen */
+  will-change: auto;
+}

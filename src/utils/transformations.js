@@ -2,7 +2,7 @@
  * utils/transformations.js
  * Centralised data for all client transformation cards.
  * Each entry maps a "before" image and an "after" image with metadata.
- * Images live in /src/assets/clients/
+ * Images live in /src/assets/clients/ (clients) and /src/assets/coach/ (coach self)
  */
 
 // ── Import all client images ──────────────────────────────────────────────────
@@ -15,8 +15,24 @@ import vaibhavAfter  from '../assets/clients/vaibhao_front_curr.jpeg'
 import vaibhavBeforeBack from '../assets/clients/vaibhav_prev_back.jpeg'
 import vaibhavAfterBack  from '../assets/clients/vaibhav_curr_back.jpeg'
 
+// ── Coach self-transformation images ─────────────────────────────────────────
+import coachBefore from '../assets/coach/before/B612_20190910_165506_165.jpg'
+import coachAfter  from '../assets/coach/front.png'
+
+
 // ── Transformation data ───────────────────────────────────────────────────────
 export const transformations = [
+  // ── Coach's own transformation (leads the section) ─────────────────────────
+  {
+    id: 0,
+    name: 'Pratideep Naik',
+    duration: '3 Years',
+    caption: 'The coach\'s own journey — from struggling to building a physique worth coaching from',
+    before: coachBefore,
+    after: coachAfter,
+    view: 'Front',
+    isCoach: true,
+  },
   {
     id: 1,
     name: 'Piyush Meshram',
@@ -54,3 +70,4 @@ export const transformations = [
     view: 'Back',
   },
 ]
+

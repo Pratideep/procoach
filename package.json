@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "framer-motion": "^11.3.28",
-    "react-intersection-observer": "^9.13.1",
-    "react-compare-image": "^3.4.0"
+    "react": "^18.3.1",
+    "react-compare-image": "^3.4.0",
+    "react-dom": "^18.3.1",
+    "react-intersection-observer": "^9.13.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",
@@ -21,7 +22,10 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
+    "sharp": "^0.34.5",
+    "svgo": "^4.0.1",
     "tailwindcss": "^3.4.11",
-    "vite": "^5.4.2"
+    "vite": "^5.4.2",
+    "vite-plugin-image-optimizer": "^2.0.3"
   }
 }
