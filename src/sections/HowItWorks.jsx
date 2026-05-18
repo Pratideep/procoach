@@ -66,8 +66,8 @@ export default function HowItWorks() {
             How It <span className="gradient-text">Works</span>
           </h2>
           <p className="section-subtitle mx-auto">
-            Three simple steps stand between you and the body you want.
-            No guesswork. No confusion. Just results.
+            Step one is a free, no-obligation consult — you only start once
+            the plan actually fits your life. Three simple steps, zero guesswork.
           </p>
         </ScrollReveal>
 

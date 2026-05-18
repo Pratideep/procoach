@@ -1,9 +1,9 @@
 /**
  * sections/Testimonials.jsx
- * Social proof section — real client quotes with star ratings in an
- * infinite horizontal marquee carousel.
+ * Social proof — real client quotes in a static, readable grid.
+ * (Was an auto-scrolling marquee, which hurt readability and surfaced the
+ * now-removed padded entries; depth > motion for a paid offer.)
  */
-import { useState } from 'react'
 import ScrollReveal from '../components/ScrollReveal'
 import { STATS, showRating } from '../utils/stats'
 
@@ -60,9 +60,6 @@ const testimonials = [
   // removed — credibility comes from depth, not volume (see IMPROVEMENT_PLAN §9).
 ]
 
-// Duplicate for seamless infinite scroll
-const doubled = [...testimonials, ...testimonials]
-
 function Stars({ count }) {
   return (
     <div className="flex gap-0.5 mb-3">
@@ -77,9 +74,9 @@ function Stars({ count }) {
 
 function TestimonialCard({ t }) {
   return (
-    <div className="flex-shrink-0 w-80 bg-dark-700 border border-white/8 rounded-2xl p-6 mx-3 hover:border-brand-blue/30 transition-colors duration-300">
+    <div className="h-full bg-dark-700 border border-white/8 rounded-2xl p-6 hover:border-brand-blue/30 transition-colors duration-300">
       <Stars count={t.stars} />
-      <p className="text-white/75 text-sm leading-relaxed mb-5 line-clamp-4">
+      <p className="text-white/75 text-sm leading-relaxed mb-5">
         &ldquo;{t.quote}&rdquo;
       </p>
       <div className="flex items-center gap-3">
@@ -107,10 +104,8 @@ function TestimonialCard({ t }) {
 }
 
 export default function Testimonials() {
-  const [paused, setPaused] = useState(false)
-
   return (
-    <section id="testimonials" className="bg-dark-900 py-20 md:py-28 overflow-hidden relative">
+    <section id="testimonials" className="bg-dark-900 py-20 md:py-28 relative">
       <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-blue/20 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 mb-12">
@@ -142,39 +137,14 @@ export default function Testimonials() {
         </ScrollReveal>
       </div>
 
-      {/* Marquee track — tap anywhere to pause on mobile */}
-      <div
-        className="relative cursor-pointer select-none"
-        onClick={() => setPaused(p => !p)}
-        aria-label={paused ? 'Resume' : 'Pause scrolling'}
-      >
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-dark-900 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-dark-900 to-transparent z-10 pointer-events-none" />
-
-        {/* Row 1 — scrolls left */}
-        <div className={`flex mb-4 ${paused ? 'marquee-paused' : 'marquee-left'}`}>
-          {doubled.map((t, i) => (
-            <TestimonialCard key={`a-${t.id}-${i}`} t={t} />
+      {/* Curated grid — readable, static, real clients only */}
+      <div className="max-w-7xl mx-auto px-5 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {testimonials.map((t, i) => (
+            <ScrollReveal key={t.id} delay={i * 80} direction="up">
+              <TestimonialCard t={t} />
+            </ScrollReveal>
           ))}
-        </div>
-
-        {/* Row 2 — scrolls right */}
-        <div className={`flex ${paused ? 'marquee-paused' : 'marquee-right'}`}>
-          {[...doubled].reverse().map((t, i) => (
-            <TestimonialCard key={`b-${t.id}-${i}`} t={t} />
-          ))}
-        </div>
-
-        {/* Pause/resume hint — mobile only */}
-        <div className="flex justify-center mt-5">
-          <div className="inline-flex items-center gap-2 bg-dark-700/80 border border-white/8 rounded-full px-4 py-1.5 text-white/40 text-xs">
-            {paused ? (
-              <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/></svg> Tap to resume</>
-            ) : (
-              <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"/></svg> Tap to pause</>
-            )}
-          </div>
         </div>
       </div>
     </section>

@@ -8,7 +8,9 @@
  *  - ANY photo tap → opens full-screen gallery lightbox
  */
 import { useState, useRef } from 'react'
+import { Award, Apple, CalendarDays, Target } from 'lucide-react'
 import ScrollReveal from '../components/ScrollReveal'
+import { STATS } from '../utils/stats'
 import Lightbox from '../components/Lightbox'
 
 // All coach photos
@@ -51,16 +53,16 @@ const journey = [
 ]
 
 const credentials = [
-  { label: 'Certified Coach',      icon: '🏅' },
-  { label: 'Precision Nutrition',  icon: '🥗' },
-  { label: '4+ Years Training',    icon: '📆' },
-  { label: '2+ Years Coaching',    icon: '🎯' },
+  { label: 'Certified Coach',                   Icon: Award },
+  { label: 'Precision Nutrition',               Icon: Apple },
+  { label: `${STATS.yearsTraining} Years Training`, Icon: CalendarDays },
+  { label: `${STATS.yearsCoaching} Years Coaching`, Icon: Target },
 ]
 
 const miniStats = [
-  { value: '20+', label: 'Transformations' },
-  { value: '2+',  label: 'Years Coaching' },
-  { value: '4+',  label: 'Years Training' },
+  { value: STATS.clients,       label: 'Transformations' },
+  { value: STATS.yearsCoaching, label: 'Years Coaching' },
+  { value: STATS.yearsTraining, label: 'Years Training' },
 ]
 
 // ── Mobile swipe carousel ────────────────────────────────────────────────────
@@ -248,13 +250,13 @@ export default function About() {
 
             {/* Credentials */}
             <div className="flex flex-wrap gap-2 mt-4 justify-center lg:justify-start">
-              {credentials.map((c) => (
+              {credentials.map(({ label, Icon }) => (
                 <span
-                  key={c.label}
+                  key={label}
                   className="inline-flex items-center gap-1.5 bg-brand-blue/8 border border-brand-blue/20 text-white/70 text-xs font-medium px-3 py-1.5 rounded-full"
                 >
-                  <span>{c.icon}</span>
-                  {c.label}
+                  <Icon className="w-3.5 h-3.5 text-brand-blue" strokeWidth={2} />
+                  {label}
                 </span>
               ))}
             </div>

@@ -1,28 +1,34 @@
 /**
  * sections/Plans.jsx
  * Two pricing tiers: Monthly (₹1,999/mo) and 3-Month Bundle (₹4,999 one-time).
+ * Price is framed against the money-back guarantee (risk reversal). Shown
+ * AFTER the proof/trust sections in the page order.
  */
+import {
+  Dumbbell, Apple, CalendarCheck, MessageCircle, BarChart3, RefreshCw,
+  Target, PiggyBank, Zap, Trophy, Phone, FileText, Flame, Check,
+} from 'lucide-react'
 import ScrollReveal from '../components/ScrollReveal'
 import { STATS } from '../utils/stats'
 import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 import { trackCta } from '../utils/analytics'
 
 const includes = [
-  { icon: '💪', text: 'Customised Workout Plan' },
-  { icon: '🥗', text: 'Personalised Diet Plan' },
-  { icon: '📅', text: 'Weekly Progress Check-ins' },
-  { icon: '💬', text: 'Daily WhatsApp Support' },
-  { icon: '📊', text: 'Body Measurements Tracking' },
-  { icon: '🔄', text: 'Plan Adjustments Every 4 Weeks' },
+  { Icon: Dumbbell,      text: 'Customised Workout Plan' },
+  { Icon: Apple,         text: 'Personalised Diet Plan' },
+  { Icon: CalendarCheck, text: 'Weekly Progress Check-ins' },
+  { Icon: MessageCircle, text: 'Daily WhatsApp Support' },
+  { Icon: BarChart3,     text: 'Body Measurements Tracking' },
+  { Icon: RefreshCw,     text: 'Plan Adjustments Every 4 Weeks' },
 ]
 
 const bundlePerks = [
-  { icon: '🎯', text: 'Everything in Monthly' },
-  { icon: '💰', text: 'Save ₹1,998 vs monthly' },
-  { icon: '⚡', text: 'Priority Response (within 2 hrs)' },
-  { icon: '🏆', text: '90-Day Transformation Guarantee' },
-  { icon: '📞', text: 'Monthly 1-on-1 Video Call' },
-  { icon: '🔥', text: 'Bonus: Supplement Guide PDF' },
+  { Icon: Target,   text: 'Everything in Monthly' },
+  { Icon: PiggyBank,text: 'Save ₹998 vs paying monthly' },
+  { Icon: Zap,      text: 'Priority Response (within 2 hrs)' },
+  { Icon: Trophy,   text: '90-Day Transformation Guarantee' },
+  { Icon: Phone,    text: 'Monthly 1-on-1 Video Call' },
+  { Icon: FileText, text: 'Bonus: Supplement Guide PDF' },
 ]
 
 export default function Plans() {
@@ -36,10 +42,11 @@ export default function Plans() {
             Simple Pricing
           </p>
           <h2 className="section-title text-white mb-4">
-            Choose Your <span className="gradient-text">Plan</span>
+            Start Your <span className="gradient-text">90-Day Transformation</span>
           </h2>
           <p className="section-subtitle mx-auto">
-            No hidden costs. Two options — pick the one that suits your commitment level.
+            One price, no hidden costs — and it's fully refundable if you follow
+            the plan and don't see results. The only risk is staying the same.
           </p>
         </ScrollReveal>
 
@@ -68,10 +75,10 @@ export default function Plans() {
 
               {/* Features */}
               <ul className="space-y-2.5 mb-8 flex-1">
-                {includes.map((item) => (
-                  <li key={item.text} className="flex items-center gap-3 text-white/70 text-sm">
-                    <span className="text-base">{item.icon}</span>
-                    <span>{item.text}</span>
+                {includes.map(({ Icon, text }) => (
+                  <li key={text} className="flex items-center gap-3 text-white/70 text-sm">
+                    <Icon className="w-4 h-4 text-brand-blue shrink-0" strokeWidth={2} />
+                    <span>{text}</span>
                   </li>
                 ))}
               </ul>
@@ -97,8 +104,8 @@ export default function Plans() {
 
               {/* Badges row */}
               <div className="flex items-center gap-2 mb-4 flex-wrap">
-                <span className="inline-flex items-center gap-1 bg-brand-blue/10 border border-brand-blue/25 text-brand-blue text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
-                  🔥 Best Value
+                <span className="inline-flex items-center gap-1.5 bg-brand-blue/10 border border-brand-blue/25 text-brand-blue text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
+                  <Flame className="w-3 h-3" strokeWidth={2.5} /> Best Value
                 </span>
                 {STATS.spotsLeft != null && (
                   <span className="inline-flex items-center gap-1 bg-red-500/10 border border-red-500/25 text-red-400 text-[10px] font-bold tracking-wider uppercase rounded-full px-3 py-1">
@@ -119,7 +126,7 @@ export default function Plans() {
               <div className="mb-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-white/30 text-sm line-through">₹5,997</span>
-                  <span className="bg-green-500/15 border border-green-500/25 text-green-400 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full">Save ₹998</span>
+                  <span className="bg-brand-green/15 border border-brand-green/30 text-brand-green-light text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full">Save ₹998</span>
                 </div>
                 <div className="flex items-end gap-1.5 mb-1">
                   <span className="text-white/50 text-lg font-light">₹</span>
@@ -130,10 +137,10 @@ export default function Plans() {
 
               {/* Bundle perks */}
               <ul className="space-y-2.5 mb-8 flex-1">
-                {bundlePerks.map((item) => (
-                  <li key={item.text} className="flex items-center gap-3 text-white/80 text-sm">
-                    <span className="text-base">{item.icon}</span>
-                    <span>{item.text}</span>
+                {bundlePerks.map(({ Icon, text }) => (
+                  <li key={text} className="flex items-center gap-3 text-white/80 text-sm">
+                    <Icon className="w-4 h-4 text-brand-blue shrink-0" strokeWidth={2} />
+                    <span>{text}</span>
                   </li>
                 ))}
               </ul>
@@ -147,21 +154,12 @@ export default function Plans() {
               >
                 {CTA_LABEL}
               </a>
-              <p className="text-center text-white/30 text-xs mt-3">90-day money back guarantee.</p>
+              <p className="flex items-center justify-center gap-1.5 text-center text-brand-green-light/80 text-xs mt-3">
+                <Check className="w-3.5 h-3.5" strokeWidth={3} /> 90-day money-back guarantee
+              </p>
             </div>
           </ScrollReveal>
         </div>
-
-        {/* Guarantee strip */}
-        <ScrollReveal delay={200} className="mt-12 text-center">
-          <div className="inline-flex items-center gap-3 bg-dark-700 border border-white/5 rounded-2xl px-6 py-4">
-            <span className="text-3xl">💯</span>
-            <div className="text-left">
-              <p className="text-white font-semibold text-sm">90-Day Money Back Guarantee</p>
-              <p className="text-white/40 text-xs">If you follow the plan and see no results, you get a full refund.</p>
-            </div>
-          </div>
-        </ScrollReveal>
 
       </div>
     </section>

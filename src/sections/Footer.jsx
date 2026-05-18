@@ -2,6 +2,7 @@
  * sections/Footer.jsx
  * Enhanced footer with social links, tagline, and WhatsApp number.
  */
+import { Heart } from 'lucide-react'
 import { buildWhatsAppUrl } from '../utils/whatsapp'
 import { WHATSAPP_NUMBER } from '../utils/whatsapp'
 
@@ -65,8 +66,8 @@ export default function Footer() {
             <p className="text-white/40 text-sm mt-3 leading-relaxed">
               Helping busy men lose fat &amp; build muscle — without giving up their lifestyle.
             </p>
-            <p className="text-white/30 text-xs mt-3">
-              Made with ❤️ for busy men.
+            <p className="flex items-center gap-1 text-white/30 text-xs mt-3">
+              Made with <Heart className="w-3 h-3 text-brand-blue fill-current" strokeWidth={0} /> for busy men.
             </p>
             {/* WhatsApp contact */}
             <a

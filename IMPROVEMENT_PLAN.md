@@ -283,12 +283,14 @@ Until these arrive, Phases 0–1 (speed, lead capture, funnel, reorder, branding
 - ✅ Unified stats into one honest source of truth (`src/utils/stats.js`); removed 2 fake testimonials; de-duplicated "spots left".
 - ⏳ Remaining Phase 1: a *dedicated* standalone Coach's Transformation section (currently the coach's before/after leads the Transformations grid — good enough, full section is Phase 2).
 
-### Phase 2 — Trust & polish (~2–3 days)
-- Replace emoji icons with SVG set; standardize design tokens; add success-green results accent.
-- Add Outcomes + standalone Guarantee + "is this for you" sections.
-- Scroll-spy nav, mobile menu WhatsApp, label fixes.
-- Testimonials → curated grid/carousel with real photos; integrate all unused assets.
-- Copy rewrites (§10).
+### Phase 2 — Trust & polish ✅ SHIPPED
+- ✅ All emoji icons replaced with `lucide-react` SVG (Plans, LeadForm, Transformations, About, Hero, Footer); added `brand-green` results accent token.
+- ✅ New sections: dedicated **CoachTransformation** (proof #2), **Outcomes**, **Qualifier** ("is this for you"), standalone **Guarantee**.
+- ✅ Scroll-spy active-section nav highlighting (IntersectionObserver); mobile menu WhatsApp + label fixes shipped in Phase 1.
+- ✅ Testimonials auto-marquee → static curated grid (real clients only); coach's own transformation moved out of the client grid into its own section.
+- ✅ Copy rewrites (§10): hero H1/sub, Plans framing, HowItWorks risk-reversal subtitle, secondary CTA label.
+- ✅ Assets: coach "before" extras → CoachTransformation; `body recompo.png` → Outcomes. `client1.jpeg` deliberately left unused — needs a real name/quote (no fabricated testimonials), see §12a.
+- ⏳ Not done: Calendly consult booking (Phase 3); a real OG share image; on-device/browser QA.
 
 ### Phase 3 — Optimize (ongoing)
 - A/B headline & primary CTA label.

@@ -19,11 +19,34 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeId, setActiveId] = useState('')
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  // Scroll-spy: highlight the link for the section currently in view.
+  useEffect(() => {
+    const ids = links.map((l) => l.href.slice(1))
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
+    if (sections.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        if (visible) setActiveId(visible.target.id)
+      },
+      // Bias the trigger band to the upper-middle of the viewport.
+      { rootMargin: '-45% 0px -50% 0px', threshold: [0, 0.25, 0.5, 1] }
+    )
+    sections.forEach((s) => observer.observe(s))
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -44,16 +67,27 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
-            <li key={l.label}>
-              <a
-                href={l.href}
-                className="text-white/70 hover:text-white text-sm font-medium tracking-wide transition-colors"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
+          {links.map((l) => {
+            const active = activeId === l.href.slice(1)
+            return (
+              <li key={l.label}>
+                <a
+                  href={l.href}
+                  aria-current={active ? 'true' : undefined}
+                  className={`relative text-sm font-medium tracking-wide transition-colors ${
+                    active ? 'text-white' : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  {l.label}
+                  <span
+                    className={`absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-brand-blue transition-all duration-300 ${
+                      active ? 'w-full' : 'w-0'
+                    }`}
+                  />
+                </a>
+              </li>
+            )
+          })}
         </ul>
 
         {/* Desktop CTAs */}

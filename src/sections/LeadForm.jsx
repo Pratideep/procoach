@@ -13,14 +13,32 @@ import { WHATSAPP_NUMBER, buildWhatsAppUrl } from '../utils/whatsapp'
 import { STATS, showRating } from '../utils/stats'
 import { submitLead } from '../utils/leads'
 import { track } from '../utils/analytics'
+import { Flame, Dumbbell, Zap, Activity, Weight, Check, AlertCircle } from 'lucide-react'
+
+// Inline field error with a consistent icon (replaces the ⚠ glyph)
+function FieldError({ children }) {
+  return (
+    <p className="flex items-center gap-1 text-red-400 text-xs mt-1">
+      <AlertCircle className="w-3 h-3 shrink-0" strokeWidth={2.5} />
+      {children}
+    </p>
+  )
+}
 
 // ── Quick form options ────────────────────────────────────────────────────────
 const GOALS = [
-  { value: 'Lose Fat',            label: '🔥 Lose Fat' },
-  { value: 'Build Muscle',        label: '💪 Build Muscle' },
-  { value: 'Body Recomposition',  label: '⚡ Body Recomp' },
-  { value: 'Improve Fitness',     label: '🏃 Improve Fitness' },
-  { value: 'Increase Strength',   label: '🏋️ More Strength' },
+  { value: 'Lose Fat',            label: 'Lose Fat',        Icon: Flame },
+  { value: 'Build Muscle',        label: 'Build Muscle',    Icon: Dumbbell },
+  { value: 'Body Recomposition',  label: 'Body Recomp',     Icon: Zap },
+  { value: 'Improve Fitness',     label: 'Improve Fitness', Icon: Activity },
+  { value: 'Increase Strength',   label: 'More Strength',   Icon: Weight },
+]
+
+const TRUST = [
+  'Free consultation — no commitment',
+  'Custom plan, not a template',
+  'Results in 90 days or money back',
+  'Works around your schedule & diet',
 ]
 
 // ── WhatsApp message builders ─────────────────────────────────────────────────
@@ -103,13 +121,13 @@ export default function LeadForm() {
 
             {/* Trust signals */}
             <ul className="space-y-3 mb-10">
-              {[
-                '✅ Free consultation — no commitment',
-                '✅ Custom plan, not a template',
-                '✅ Results in 90 days or money back',
-                '✅ Works around your schedule & diet',
-              ].map((t) => (
-                <li key={t} className="text-white/70 text-base">{t}</li>
+              {TRUST.map((t) => (
+                <li key={t} className="flex items-center gap-2.5 text-white/70 text-base">
+                  <span className="shrink-0 w-5 h-5 rounded-full bg-brand-green/15 flex items-center justify-center">
+                    <Check className="w-3 h-3 text-brand-green-light" strokeWidth={3} />
+                  </span>
+                  {t}
+                </li>
               ))}
             </ul>
 
@@ -140,7 +158,7 @@ export default function LeadForm() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-white font-bold text-2xl mb-2">WhatsApp Opened! 🎉</h3>
+                <h3 className="text-white font-bold text-2xl mb-2">WhatsApp Opened</h3>
                 <p className="text-white/60 text-sm mb-6">
                   Your details are pre-filled. Just hit send —<br />
                   Pratideep will reply within 24 hours.
@@ -216,29 +234,30 @@ export default function LeadForm() {
                       autoComplete="name"
                       className={`w-full bg-dark-600 border ${errors.name ? 'border-red-500/70' : 'border-white/10 focus:border-brand-blue'} rounded-xl px-4 py-3 text-white/90 text-sm placeholder-white/20 focus:outline-none transition-colors`}
                     />
-                    {errors.name && <p className="text-red-400 text-xs mt-1">⚠ {errors.name}</p>}
+                    {errors.name && <FieldError>{errors.name}</FieldError>}
                   </div>
 
                   {/* Goal chips */}
                   <div>
                     <p className="text-white/50 text-xs font-semibold uppercase tracking-wider mb-2">Your Goal</p>
                     <div className="flex flex-wrap gap-2">
-                      {GOALS.map((g) => (
+                      {GOALS.map(({ value, label, Icon }) => (
                         <button
-                          key={g.value}
+                          key={value}
                           type="button"
-                          onClick={() => { setGoal(g.value); setErrors(p => ({ ...p, goal: undefined })) }}
-                          className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                            goal === g.value
+                          onClick={() => { setGoal(value); setErrors(p => ({ ...p, goal: undefined })) }}
+                          className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                            goal === value
                               ? 'bg-brand-blue text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]'
                               : 'bg-dark-600 border border-white/10 text-white/60 hover:border-white/30 hover:text-white'
                           }`}
                         >
-                          {g.label}
+                          <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                          {label}
                         </button>
                       ))}
                     </div>
-                    {errors.goal && <p className="text-red-400 text-xs mt-1">⚠ {errors.goal}</p>}
+                    {errors.goal && <FieldError>{errors.goal}</FieldError>}
                   </div>
 
                   {/* WhatsApp number */}
@@ -257,7 +276,7 @@ export default function LeadForm() {
                       autoComplete="tel"
                       className={`w-full bg-dark-600 border ${errors.phone ? 'border-red-500/70' : 'border-white/10 focus:border-brand-blue'} rounded-xl px-4 py-3 text-white/90 text-sm placeholder-white/20 focus:outline-none transition-colors`}
                     />
-                    {errors.phone && <p className="text-red-400 text-xs mt-1">⚠ {errors.phone}</p>}
+                    {errors.phone && <FieldError>{errors.phone}</FieldError>}
                   </div>
 
                   {/* Submit */}
@@ -273,7 +292,7 @@ export default function LeadForm() {
                   </button>
 
                   <p className="text-center text-white/25 text-xs">
-                    I'll personally contact you within 24 hours 🙏
+                    I'll personally contact you within 24 hours.
                   </p>
                 </form>
 

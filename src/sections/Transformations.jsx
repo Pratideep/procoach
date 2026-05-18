@@ -9,6 +9,7 @@
  *  - CTA banner at the bottom
  */
 import { useState, useEffect, useRef } from 'react'
+import { Sparkles, User, RefreshCw, Star } from 'lucide-react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import Lightbox from '../components/Lightbox'
 import ScrollReveal from '../components/ScrollReveal'
@@ -58,7 +59,7 @@ function FilterPill({ active, onClick, children }) {
   return (
     <button
       onClick={onClick}
-      className={`px-5 py-2 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
+      className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
         active
           ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(59,130,246,0.4)]'
           : 'bg-dark-600 text-white/50 hover:text-white border border-white/10 hover:border-white/30'
@@ -88,7 +89,7 @@ function TransformationCard({ t, index, showHint, onClick }) {
         {/* Coach badge */}
         {t.isCoach && (
           <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-yellow-500/90 backdrop-blur-sm text-dark-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg pointer-events-none">
-            ⭐ Coach's Journey
+            <Star className="w-3 h-3 fill-current" strokeWidth={0} /> Coach's Journey
           </div>
         )}
 
@@ -182,8 +183,8 @@ export default function Transformations() {
             Client <span className="gradient-text">Transformations</span>
           </h2>
           <p className="section-subtitle mx-auto mb-8">
-            Every result below was earned with the same proven system.
-            <span className="block text-brand-blue/80 font-medium mt-1">👆 Tap any card to view full screen</span>
+            Real clients, same proven system. Drag any slider to compare —
+            tap a card for the full-screen view.
           </p>
 
           {/* Filter pills */}
@@ -194,7 +195,11 @@ export default function Transformations() {
                 active={activeFilter === f}
                 onClick={() => setActiveFilter(f)}
               >
-                {f === 'All' ? '✦ All' : f === 'Front' ? '👤 Front' : '🔁 Back'}
+                {f === 'All'
+                  ? <><Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} /> All</>
+                  : f === 'Front'
+                  ? <><User className="w-3.5 h-3.5" strokeWidth={2.5} /> Front</>
+                  : <><RefreshCw className="w-3.5 h-3.5" strokeWidth={2.5} /> Back</>}
               </FilterPill>
             ))}
           </div>

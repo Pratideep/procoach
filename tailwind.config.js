@@ -12,9 +12,14 @@ export default {
       },
       colors: {
         // ── Blue accent palette (replaces orange) ───────────────────
-        'brand-blue':       '#3B82F6',   // blue-500 — primary
+        'brand-blue':       '#3B82F6',   // blue-500 — primary / trust
         'brand-blue-light': '#60A5FA',   // blue-400 — lighter
         'brand-blue-dark':  '#2563EB',   // blue-600 — darker
+        // ── Results accent — the "after"/win/guarantee colour. The
+        //    before→after pattern needs muted→vibrant contrast; green = result.
+        'brand-green':       '#22C55E',  // green-500 — results / guarantee
+        'brand-green-light': '#4ADE80',  // green-400
+        'brand-green-dark':  '#16A34A',  // green-600
         dark: {
           900: '#080808',
           800: '#0D0F14',
