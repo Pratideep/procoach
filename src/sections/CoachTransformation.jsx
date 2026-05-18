@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { ShieldCheck, ArrowRight } from 'lucide-react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import Lightbox from '../components/Lightbox'
+import VideoIntro from '../components/VideoIntro'
 import ScrollReveal from '../components/ScrollReveal'
 import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 import { trackCta } from '../utils/analytics'
@@ -83,6 +84,11 @@ export default function CoachTransformation() {
               so they don't lose the years I did. I won't ask you to do anything
               I haven't done myself.
             </p>
+
+            {/* Renders only if INTRO_VIDEO_URL is set (utils/config.js) */}
+            <div className="mb-8 empty:mb-0">
+              <VideoIntro />
+            </div>
 
             <div className="flex flex-wrap gap-3 mb-8">
               <span className="inline-flex items-center gap-2 bg-brand-green/10 border border-brand-green/25 text-brand-green-light text-sm font-semibold px-4 py-2 rounded-full">

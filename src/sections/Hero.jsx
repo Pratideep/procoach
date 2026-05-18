@@ -8,7 +8,15 @@ import { buildWhatsAppUrl } from '../utils/whatsapp'
 import { ShieldCheck, ArrowRight } from 'lucide-react'
 import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 import { trackCta } from '../utils/analytics'
+import { getVariant } from '../utils/abtest'
 import { STATS, showRating } from '../utils/stats'
+
+// A/B: hero headline (experiment `hero_headline`)
+const HEADLINES = {
+  control: ['Lose Fat &', 'Build Muscle', 'In 90 Days'],
+  outcome: ['Drop The Fat.', 'Build The Body.', 'In 90 Days.'],
+}
+const headlineLines = HEADLINES[getVariant('hero_headline')] ?? HEADLINES.control
 import coachFront from '../assets/coach/front.png'
 
 // Stat items shown below the headline — all values from the single source of truth
@@ -116,9 +124,9 @@ export default function Hero() {
             className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-9xl leading-none tracking-wide uppercase mb-4"
             style={{ animationDelay: '100ms' }}
           >
-            <span className="block text-white">Lose Fat &amp;</span>
-            <span className="block gradient-text">Build Muscle</span>
-            <span className="block text-white">In 90 Days</span>
+            <span className="block text-white">{headlineLines[0]}</span>
+            <span className="block gradient-text">{headlineLines[1]}</span>
+            <span className="block text-white">{headlineLines[2]}</span>
           </h1>
 
           <p className="text-white/60 text-lg md:text-xl max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed font-light">

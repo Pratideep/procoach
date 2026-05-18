@@ -7,12 +7,13 @@
  *
  * No backend required — sends everything to WhatsApp.
  */
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import ScrollReveal from '../components/ScrollReveal'
 import { WHATSAPP_NUMBER, buildWhatsAppUrl } from '../utils/whatsapp'
 import { STATS, showRating } from '../utils/stats'
 import { submitLead } from '../utils/leads'
 import { track } from '../utils/analytics'
+import { CALENDLY_URL, hasCalendly } from '../utils/config'
 import { Flame, Dumbbell, Zap, Activity, Weight, Check, AlertCircle } from 'lucide-react'
 
 // Inline field error with a consistent icon (replaces the ⚠ glyph)
@@ -60,6 +61,15 @@ export default function LeadForm() {
   const [goal, setGoal]       = useState('')
   const [errors, setErrors]   = useState({})
   const [submitted, setSubmitted] = useState(false)
+
+  // Fire `form_start` once, on the first real interaction with the form.
+  const startedRef = useRef(false)
+  const markStart = () => {
+    if (!startedRef.current) {
+      startedRef.current = true
+      track('form_start')
+    }
+  }
 
   /* 1-tap direct WhatsApp — no form */
   const handleDirectWhatsApp = () => {
@@ -163,6 +173,19 @@ export default function LeadForm() {
                   Your details are pre-filled. Just hit send —<br />
                   Pratideep will reply within 24 hours.
                 </p>
+
+                {hasCalendly && (
+                  <a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track('calendly_open', { source: 'success_state' })}
+                    className="btn-primary w-full mb-3"
+                  >
+                    Or book your free consult call now
+                  </a>
+                )}
+
                 <button
                   className="btn-outline text-sm px-6 py-3"
                   onClick={() => { setSubmitted(false); setName(''); setPhone(''); setGoal(''); setErrors({}) }}
@@ -230,7 +253,7 @@ export default function LeadForm() {
                       type="text"
                       placeholder="Enter your name"
                       value={name}
-                      onChange={(e) => { setName(e.target.value); setErrors(p => ({ ...p, name: undefined })) }}
+                      onChange={(e) => { markStart(); setName(e.target.value); setErrors(p => ({ ...p, name: undefined })) }}
                       autoComplete="name"
                       className={`w-full bg-dark-600 border ${errors.name ? 'border-red-500/70' : 'border-white/10 focus:border-brand-blue'} rounded-xl px-4 py-3 text-white/90 text-sm placeholder-white/20 focus:outline-none transition-colors`}
                     />
@@ -245,7 +268,7 @@ export default function LeadForm() {
                         <button
                           key={value}
                           type="button"
-                          onClick={() => { setGoal(value); setErrors(p => ({ ...p, goal: undefined })) }}
+                          onClick={() => { markStart(); setGoal(value); setErrors(p => ({ ...p, goal: undefined })) }}
                           className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                             goal === value
                               ? 'bg-brand-blue text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]'
@@ -270,7 +293,7 @@ export default function LeadForm() {
                       type="tel"
                       placeholder="10-digit mobile number"
                       value={phone}
-                      onChange={(e) => { setPhone(e.target.value); setErrors(p => ({ ...p, phone: undefined })) }}
+                      onChange={(e) => { markStart(); setPhone(e.target.value); setErrors(p => ({ ...p, phone: undefined })) }}
                       inputMode="numeric"
                       maxLength={10}
                       autoComplete="tel"

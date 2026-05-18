@@ -292,10 +292,13 @@ Until these arrive, Phases 0–1 (speed, lead capture, funnel, reorder, branding
 - ✅ Assets: coach "before" extras → CoachTransformation; `body recompo.png` → Outcomes. `client1.jpeg` deliberately left unused — needs a real name/quote (no fabricated testimonials), see §12a.
 - ⏳ Not done: Calendly consult booking (Phase 3); a real OG share image; on-device/browser QA.
 
-### Phase 3 — Optimize (ongoing)
-- A/B headline & primary CTA label.
-- Coach intro video; Calendly consult.
-- Iterate on funnel drop-off from analytics.
+### Phase 3 — Optimize ✅ INFRASTRUCTURE SHIPPED (data-gathering ongoing)
+- ✅ A/B harness (`src/utils/abtest.js`): stable per-visitor variants, fires `experiment_view`. Live experiments: `hero_headline` (control vs outcome) and `primary_cta` label (resolved once in `cta.js`, site-wide consistent).
+- ✅ Deeper funnel instrumentation (`components/FunnelTracker.jsx`): `section_view` per key section + `scroll_depth` 25/50/75/100; `form_start` on first form interaction. Now you can *see* where drop-off happens.
+- ✅ Coach intro video: `components/VideoIntro.jsx`, renders only when `INTRO_VIDEO_URL` is set in `src/utils/config.js` (YouTube/Vimeo/mp4).
+- ✅ Calendly consult: success state shows a "book your free consult" button when `CALENDLY_URL` is set in `src/utils/config.js` — makes the "free call" real.
+- ✅ Real OG share image generated (`scripts/make-og-image.mjs` → `public/og-image.jpg`, `npm run og:image`); `og:image`/`twitter:image` wired (needs domain prefix for absolute URL).
+- ⏳ Ongoing & owner-dependent: add the analytics snippet so events flow; then read variant/section/scroll data and iterate. Fill `config.js` with real video/Calendly URLs when available.
 
 ---
 

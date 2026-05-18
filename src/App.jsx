@@ -5,6 +5,7 @@
 import Navbar          from './components/Navbar'
 import StickyBar       from './components/StickyBar'
 import WhatsAppButton  from './components/WhatsAppButton'
+import FunnelTracker   from './components/FunnelTracker'
 
 import Hero                from './sections/Hero'
 import CoachTransformation from './sections/CoachTransformation'
@@ -54,6 +55,9 @@ export default function App() {
 
       {/* Always-visible floating WhatsApp button (desktop) */}
       <WhatsAppButton />
+
+      {/* Invisible — emits section_view / scroll_depth funnel events */}
+      <FunnelTracker />
     </>
   )
 }
