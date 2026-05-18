@@ -171,18 +171,18 @@ export default function Hero() {
         {/* Right — coach photo */}
         <div className="flex-1 flex justify-center lg:justify-end relative">
           {/* Glow behind photo */}
-          <div className="absolute w-72 h-72 bg-brand-blue/20 rounded-full blur-3xl" />
-          <div className="relative w-72 md:w-80 lg:w-96">
+          <div className="absolute w-80 h-80 bg-brand-blue/25 rounded-full blur-3xl" />
+          <div className="relative w-80 sm:w-96 lg:w-[28rem]">
             {/* Decorative ring */}
             <div className="absolute inset-0 rounded-2xl border-2 border-brand-blue/20 rotate-3 scale-105" />
             <img
               src={coachFront}
               alt="Coach Pratideep Naik"
-              width={384}
-              height={600}
+              width={448}
+              height={560}
               fetchPriority="high"
               decoding="async"
-              className="relative rounded-2xl object-contain object-center w-full max-h-[600px] shadow-2xl shadow-black/60"
+              className="relative rounded-2xl object-cover object-top w-full aspect-[4/5] shadow-2xl shadow-black/60"
             />
             {/* Badge overlay */}
             <div className="absolute -bottom-4 -left-4 bg-dark-700 border border-white/10 rounded-xl px-4 py-3 shadow-xl">

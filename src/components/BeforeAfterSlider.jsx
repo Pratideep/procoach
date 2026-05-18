@@ -1,12 +1,19 @@
 /**
  * components/BeforeAfterSlider.jsx
  * Interactive drag/touch slider to compare before and after images.
- * Uses object-contain so full body is always visible — no cropping.
+ *
+ * In cards (default) the images fill the frame with object-cover (anchored to
+ * the top so faces/torsos stay in view) so the photos read big and bold.
+ * In the Lightbox (fullHeight) it switches to object-contain so the full
+ * body is visible with no cropping for the detailed view.
+ *
+ * Both layers are the same full-size box; the BEFORE layer is revealed with
+ * clip-path, so the two images stay perfectly aligned at any slider position.
  *
  * Props:
  *  before, after — image src strings
  *  alt           — accessible label
- *  fullHeight    — if true (inside Lightbox), expands to fill available height
+ *  fullHeight    — if true (inside Lightbox), expand + show full body (contain)
  */
 import { useRef, useState, useCallback } from 'react'
 
@@ -37,7 +44,10 @@ export default function BeforeAfterSlider({ before, after, alt = '', fullHeight 
 
   const heightClass = fullHeight
     ? 'h-full max-h-[calc(100vh-220px)]'
-    : 'aspect-[3/4]'
+    : 'aspect-[4/5]'
+
+  // Cards fill the frame (bold); lightbox shows the whole body uncropped.
+  const imgFit = fullHeight ? 'object-contain' : 'object-cover object-top'
 
   return (
     <div
@@ -49,29 +59,26 @@ export default function BeforeAfterSlider({ before, after, alt = '', fullHeight 
       onTouchMove={onTouchMove}
       onTouchEnd={() => setTouchActive(false)}
     >
-      {/* AFTER image — base layer, object-contain keeps full body */}
+      {/* AFTER image — base layer */}
       <img
         src={after}
         alt={`After – ${alt}`}
-        className="absolute inset-0 w-full h-full object-contain"
+        className={`absolute inset-0 w-full h-full ${imgFit}`}
         loading="lazy"
+        decoding="async"
         draggable={false}
       />
 
-      {/* BEFORE image — clipped by slider */}
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ width: `${sliderPct}%` }}
-      >
-        <img
-          src={before}
-          alt={`Before – ${alt}`}
-          className="absolute inset-0 h-full object-contain"
-          style={{ width: containerRef.current?.offsetWidth ?? '100%' }}
-          loading="lazy"
-          draggable={false}
-        />
-      </div>
+      {/* BEFORE image — same full-size box, revealed via clip-path */}
+      <img
+        src={before}
+        alt={`Before – ${alt}`}
+        className={`absolute inset-0 w-full h-full ${imgFit}`}
+        style={{ clipPath: `inset(0 ${100 - sliderPct}% 0 0)` }}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+      />
 
       {/* Labels */}
       <span className="absolute top-3 left-3 bg-black/80 text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider z-10 pointer-events-none">

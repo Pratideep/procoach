@@ -8,27 +8,28 @@ yet (`submitLead` is a safe no-op until the endpoint is set).
 
 ## Steps
 
-1. Create a new Google Sheet. Add this header row in row 1:
+1. Create a new Google Sheet. Add this header row in row 1
+   (one column per cell):
 
    ```
-   ts | name | phone | goal | source | page
+   ts | name | phone | email | age | gender | height | currentWeight | targetWeight | goal | experience | daysPerWeek | notes | source | page
    ```
 
-2. In the Sheet: **Extensions → Apps Script**. Delete any code and paste:
+2. In the Sheet: **Extensions → Apps Script**. Delete any code and paste
+   this (it writes the columns in a fixed order, so future field changes
+   only need a tweak here — no re-deploy of the site):
 
    ```javascript
+   var FIELDS = ['ts','name','phone','email','age','gender','height',
+     'currentWeight','targetWeight','goal','experience','daysPerWeek',
+     'notes','source','page'];
+
    function doPost(e) {
      try {
        var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
        var d = JSON.parse(e.postData.contents);
-       sheet.appendRow([
-         d.ts || new Date().toISOString(),
-         d.name || '',
-         d.phone || '',
-         d.goal || '',
-         d.source || '',
-         d.page || ''
-       ]);
+       d.ts = d.ts || new Date().toISOString();
+       sheet.appendRow(FIELDS.map(function (k) { return d[k] || ''; }));
        return ContentService.createTextOutput('ok');
      } catch (err) {
        return ContentService.createTextOutput('error: ' + err);
@@ -58,7 +59,8 @@ yet (`submitLead` is a safe no-op until the endpoint is set).
   headers), so the site can't read the response — that's expected. The row
   still gets written. Confirm by checking the sheet, not the network tab.
 - To turn lead capture off again, set `LEADS_ENDPOINT = ''`.
-- `source` tells you which path the lead came from: `quick_form` (filled the
-  form) or `direct_whatsapp` (tapped the 1-tap button — no name/phone).
+- `source` tells you which path the lead came from: `registration_form`
+  (filled the full application) or `direct_whatsapp` (tapped "message the
+  coach" — no details, just intent).
 - Optional: add an `onEdit`/notification or a Google Form-style email trigger
   in Apps Script if you want an email per lead.

@@ -59,7 +59,7 @@ export default function CoachTransformation() {
                   loading="lazy"
                   decoding="async"
                   onClick={() => setLightboxIndex(i + 1)}
-                  className="h-28 w-full object-cover rounded-xl border border-white/8 bg-dark-700 cursor-pointer hover:opacity-90 transition-opacity"
+                  className="h-36 sm:h-44 w-full object-cover object-top rounded-xl border border-white/8 bg-dark-700 cursor-pointer hover:opacity-90 transition-opacity"
                 />
               ))}
             </div>

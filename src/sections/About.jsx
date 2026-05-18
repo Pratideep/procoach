@@ -98,7 +98,7 @@ function MobileCarousel({ onPhotoTap }) {
         <img
           src={allPhotos[current].src}
           alt={allPhotos[current].alt}
-          className="w-full max-h-[420px] object-contain"
+          className="w-full aspect-[4/5] object-cover object-top"
           loading="lazy"
           draggable={false}
         />
@@ -202,7 +202,7 @@ export default function About() {
                         key={`col1-${i}`}
                         src={src}
                         alt="Coach Pratideep Naik"
-                        className="w-full h-64 object-contain bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        className="w-full h-80 object-cover object-top bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
                         loading="lazy"
                         decoding="async"
                         onClick={() => setLightboxIndex(photoIdx >= 0 ? photoIdx : 0)}
@@ -220,7 +220,7 @@ export default function About() {
                         key={`col2-${i}`}
                         src={src}
                         alt="Coach Pratideep Naik"
-                        className="w-full h-64 object-contain bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        className="w-full h-80 object-cover object-top bg-dark-900 rounded-xl mb-3 shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
                         loading="lazy"
                         decoding="async"
                         onClick={() => setLightboxIndex(photoIdx >= 0 ? photoIdx : 0)}
