@@ -3,8 +3,8 @@
  * Full-screen swipeable image viewer.
  *
  * Two modes:
- *  - mode="transformation" → shows before/after side-by-side with a full BeforeAfterSlider
- *  - mode="gallery"        → shows single images, swipe to browse
+ *  - mode="transformation" → both full before/after images side by side
+ *  - mode="gallery"        → single images, arrows/swipe to browse
  *
  * Props:
  *  items      — array of { before, after, name, caption, duration } (transformation)
@@ -14,7 +14,7 @@
  *  onClose    — callback to close
  */
 import { useEffect, useRef, useState, useCallback } from 'react'
-import BeforeAfterSlider from './BeforeAfterSlider'
+import BeforeAfter from './BeforeAfter'
 import { buildWhatsAppUrl } from '../utils/whatsapp'
 
 export default function Lightbox({ items = [], startIndex = 0, mode = 'transformation', onClose }) {
@@ -122,13 +122,13 @@ export default function Lightbox({ items = [], startIndex = 0, mode = 'transform
         {/* Content */}
         <div className="w-full max-w-4xl h-full flex items-center justify-center">
           {mode === 'transformation' ? (
-            /* Transformation mode — full BeforeAfterSlider */
+            /* Transformation mode — both full images side by side */
             <div className="w-full max-h-[calc(100vh-220px)]">
-              <BeforeAfterSlider
+              <BeforeAfter
                 before={item.before}
                 after={item.after}
                 alt={item.name || ''}
-                fullHeight
+                full
               />
               {item.caption && (
                 <p className="text-white/50 text-sm text-center mt-3">{item.caption}</p>
@@ -164,8 +164,8 @@ export default function Lightbox({ items = [], startIndex = 0, mode = 'transform
       <div className="shrink-0 px-5 py-4 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p className="text-white/50 text-sm text-center sm:text-left">
           {mode === 'transformation'
-            ? 'Drag the slider · Swipe to see more results'
-            : 'Swipe to browse · Tap outside to close'}
+            ? 'Use the arrows to see more results'
+            : 'Use the arrows to browse · Tap outside to close'}
         </p>
         <div className="flex gap-3">
           <a

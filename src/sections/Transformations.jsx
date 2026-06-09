@@ -3,14 +3,13 @@
  * Transformation showcase with:
  *  - Filter tabs (All / Front / Back)
  *  - Animated stat counters
- *  - Clickable cards that open full-screen Lightbox
- *  - Swipeable Lightbox with CTA inside
- *  - Drag hint tooltip on first card
+ *  - Static side-by-side before/after (both full images, no slider)
+ *  - Clickable cards that open a full-screen Lightbox
  *  - CTA banner at the bottom
  */
 import { useState, useEffect, useRef } from 'react'
 import { Sparkles, User, RefreshCw, Star } from 'lucide-react'
-import BeforeAfterSlider from '../components/BeforeAfterSlider'
+import BeforeAfter from '../components/BeforeAfter'
 import Lightbox from '../components/Lightbox'
 import ScrollReveal from '../components/ScrollReveal'
 import { transformations } from '../utils/transformations'
@@ -104,8 +103,8 @@ function TransformationCard({ t, index, showHint, onClick }) {
           </div>
         )}
 
-        {/* Before/After slider preview */}
-        <BeforeAfterSlider
+        {/* Before/After — both full images, side by side */}
+        <BeforeAfter
           before={t.before}
           after={t.after}
           alt={`${t.name} transformation`}
@@ -183,8 +182,8 @@ export default function Transformations() {
             Client <span className="gradient-text">Transformations</span>
           </h2>
           <p className="section-subtitle mx-auto mb-8">
-            Real clients, same proven system. Drag any slider to compare —
-            tap a card for the full-screen view.
+            Real clients, same proven system. Tap any card for the
+            full-screen view.
           </p>
 
           {/* Filter pills */}

@@ -6,23 +6,23 @@
  */
 import { useState } from 'react'
 import { ShieldCheck, ArrowRight } from 'lucide-react'
-import BeforeAfterSlider from '../components/BeforeAfterSlider'
+import BeforeAfter from '../components/BeforeAfter'
 import Lightbox from '../components/Lightbox'
 import VideoIntro from '../components/VideoIntro'
 import ScrollReveal from '../components/ScrollReveal'
 import { CTA_LABEL, CTA_HREF } from '../utils/cta'
 import { trackCta } from '../utils/analytics'
 
-import coachBefore  from '../assets/coach/before/B612_20190910_165506_165.jpg'
-import coachBefore2 from '../assets/coach/before/IMG20240426212821.jpg'
-import coachBefore3 from '../assets/coach/before/Screenshot_2023-01-07-20-53-27-78_99c04817c0de5652397fc8b56c3b3817.jpg'
-import coachAfter   from '../assets/coach/front.png'
+import coachBefore from '../assets/coach/before/Screenshot_2023-01-07-20-53-27-78_99c04817c0de5652397fc8b56c3b3817.jpg'
+import coachAfter  from '../assets/coach/front.png'
+import coachAfter2 from '../assets/coach/aestheics1.jpg'
+import coachAfter3 from '../assets/coach/lat-spread.jpg'
 
 const galleryItems = [
-  { src: coachBefore,  alt: 'Coach Pratideep — before, 2019' },
-  { src: coachBefore3, alt: 'Coach Pratideep — before, 2023' },
-  { src: coachBefore2, alt: 'Coach Pratideep — before, 2024 (early)' },
-  { src: coachAfter,   alt: 'Coach Pratideep — current physique' },
+  { src: coachBefore, alt: 'Coach Pratideep — before' },
+  { src: coachAfter,  alt: 'Coach Pratideep — now' },
+  { src: coachAfter2, alt: 'Coach Pratideep — now, front' },
+  { src: coachAfter3, alt: 'Coach Pratideep — now, back' },
 ]
 
 export default function CoachTransformation() {
@@ -46,7 +46,7 @@ export default function CoachTransformation() {
               onKeyDown={(e) => e.key === 'Enter' && setLightboxIndex(0)}
               aria-label="View coach transformation full screen"
             >
-              <BeforeAfterSlider before={coachBefore} after={coachAfter} alt="Coach Pratideep transformation" />
+              <BeforeAfter before={coachBefore} after={coachAfter} alt="Coach Pratideep transformation" />
             </div>
 
             {/* Extra angles */}
@@ -74,10 +74,10 @@ export default function CoachTransformation() {
               I Built This <span className="gradient-text">Myself First</span>
             </h2>
             <p className="text-white/65 text-lg leading-relaxed mb-4">
-              In 2019 I was the guy who avoided photos. No coach, no plan, no
-              clue — just frustration. It took me years of trial and error to
-              figure out what actually works for a normal person with a normal
-              schedule.
+              Not long ago I was the guy who avoided photos. No coach, no plan,
+              no clue — just frustration. It took me years of trial and error
+              to figure out what actually works for a normal person with a
+              normal schedule.
             </p>
             <p className="text-white/55 text-base leading-relaxed mb-8">
               That hard-won system is exactly what I now build for my clients —
